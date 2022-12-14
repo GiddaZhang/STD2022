@@ -9,6 +9,8 @@ class VideoFeatDataset(data.Dataset):
         self.vpath = os.path.join(root, 'vfeat')
 
     def __getitem__(self, index):
+        if index < 500:
+            index += 500
         vfeat = np.load(os.path.join(self.vpath, '%04d.npy'%(index))).astype('float32')
         afeat = np.load(os.path.join(self.apath, '%04d.npy'%(index))).astype('float32')
         return vfeat, afeat
