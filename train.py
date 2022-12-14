@@ -85,7 +85,11 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
 
     end = time.time()
     for i, (vfeat, afeat) in enumerate(train_loader):
-        bz = vfeat.size()[0]
+        # afeat = [64, 10, 128], 64 is batch_size
+        # vfeat = [64, 10, 512], 64 is batch_size
+
+        # shuffle
+        bz = vfeat.size()[0]        # batch_size
         orders = np.arange(bz).astype('int32')
         shuffle_orders = orders.copy()
         np.random.shuffle(shuffle_orders)
@@ -93,6 +97,8 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
         afeat2 = afeat[torch.from_numpy(shuffle_orders).long()].clone()
 
         # concat the vfeat and afeat respectively
+        # afeat0 = [128, 10, 128]
+        # vfeat0 = [128, 10, 512]
         afeat0 = torch.cat((afeat, afeat2), 0)
         vfeat0 = torch.cat((vfeat, vfeat), 0)
 
@@ -110,6 +116,8 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
         target = torch.cat((target2, target1), 0)
 
         # transpose the feats
+        # afeat0 = [128, 128, 10]
+        # vfeat0 = [128, 512, 10]
         vfeat0 = vfeat0.transpose(2, 1)
         afeat0 = afeat0.transpose(2, 1)
 
@@ -124,8 +132,8 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
             afeat_var = afeat_var.cuda()
             target_var = target_var.cuda()
 
-        prob=model(vfeat_var,afeat_var)
-        loss=criterion(prob,target_var)
+        prob = model(vfeat_var, afeat_var)
+        loss = criterion(prob, target_var)
         losses.update(loss.item(), vfeat.size(0))
 
         ##############################
@@ -161,6 +169,7 @@ def main():
 
     # optimizer
     optimizer = optim.Adam(model.parameters(), opt.lr)
+    # optimizer = optim.SGD(model.parameters(), opt.lr)
 
     # adjust learning rate every lr_decay_epoch
     lambda_lr = lambda epoch: opt.lr_decay ** ((epoch + 1) // opt.lr_decay_epoch)

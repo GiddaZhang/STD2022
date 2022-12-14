@@ -3,19 +3,22 @@ import torch
 import numpy as np
 import os
 
-epoch = 90
+epoch = 150
 model = models.FrameByFrame()
 ckpt = torch.load('checkpoints/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
 model.load_state_dict(ckpt)
 model.cuda().eval()
 
-vpath = 'Test/vfeat'
-apath = 'Test/afeat'
+# vpath = 'Test/Clean/vfeat'
+# apath = 'Test/Clean/afeat'
+vpath = 'Calibrate/vfeat'
+apath = 'Calibrate/afeat'
+test_num = 500
 
 def gen_tsample(n):
     tsample = np.zeros((500, n)).astype(np.int16)
     for i in range(500):
-        tsample[i] = np.random.permutation(804)[:n]
+        tsample[i] = np.random.permutation(test_num)[:n]
     np.save('tsample_{}.npy'.format(n), tsample)
 
 def get_top(tsample, rst):
@@ -39,19 +42,20 @@ def get_top(tsample, rst):
     print('Top5 accuracy for sample {} is: {}.'.format(n, top5))
 
 
-rst = np.zeros((804, 804))
-vfeats = torch.zeros(804, 512, 10).float()
-afeats = torch.zeros(804, 128, 10).float()
-for i in range(804):
+rst = np.zeros((test_num, test_num))
+vfeats = torch.zeros(test_num, 512, 10).float()
+afeats = torch.zeros(test_num, 128, 10).float()
+for i in range(test_num):
     vfeat = np.load(os.path.join(vpath, '%04d.npy'%i))
-    for j in range(804):
+    for j in range(test_num):
         vfeats[j] = torch.from_numpy(vfeat).float().permute(1, 0)
         afeat = np.load(os.path.join(apath, '%04d.npy'%j))
         afeats[j] = torch.from_numpy(afeat).float().permute(1, 0)
     with torch.no_grad():
         out = model(vfeats.cuda(), afeats.cuda())
     rst[i] = (out[:,1] - out[:,0]).cpu().numpy()
-    print(i)
+    if i % 10 is 0:
+        print(i)
 
 np.save('rst_epoch{}.npy'.format(epoch), rst)
 
