@@ -2,6 +2,7 @@
 .ipynb_checkpoints
 __pycache__
 *.pth
+*.npy
 .env/*
 Train/
 Test/
