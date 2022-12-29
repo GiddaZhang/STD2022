@@ -59,7 +59,7 @@ for i in range(test_num):
 
 np.save('rst_epoch{}.npy'.format(epoch), rst)
 
-
+# rst = np.load('rst_epoch{}.npy'.format(epoch))
 print('Test checkpoint epoch {}.'.format(epoch))
 
 gen_tsample(50)
