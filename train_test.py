@@ -204,7 +204,6 @@ def main():
     # train data loader
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opt.batchSize,
                                                shuffle=True, num_workers=int(opt.workers))
-    # test data loader
     # create model
     model = models.FrameByFrame()
 
@@ -233,7 +232,8 @@ def main():
     
 
     ############## Test ##############
-    test(test_dataset, opt.max_epochs)
+    test(test_dataset, 100)
+    test(test_dataset, 140)
 
 if __name__ == '__main__':
     main()
