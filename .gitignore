@@ -3,6 +3,7 @@
 __pycache__
 torchvggish/*.pth
 *.npy
+*.pth
 .env/*
 Train/
 Test/
