@@ -56,9 +56,9 @@ def extract_dir(model, dirname, save_dir):
             ret, frame = cap.read()
             if not ret:
                 break
-            frame = cv2.fastNlMeansDenoisingColored(
-                frame, None, 10, 10, 7, 15)  # 去噪
             if cnt == step * i:
+                frame = cv2.fastNlMeansDenoisingColored(
+                    frame, None, 10, 10, 7, 15)  # 去噪
                 if h > w:
                     x[i, :, int((224 - news[0]) / 2):int((224 - news[0]) / 2) +
                       news[0]] = cv2.resize(frame, news)[:, :, ::-1].copy()
@@ -70,8 +70,8 @@ def extract_dir(model, dirname, save_dir):
                 break
             cnt += 1
             print("\r", end="")
-            print("进度: {}%: ".format(cnt * 100 // ((step+1)*10)),
-                  "▓" * (cnt * 100 // ((step+1)*10*2)), end="")
+            print("进度: {}%: ".format((i + 1) * 10),
+                  "=" * ((i + 1) * 10), end="")
             sys.stdout.flush()
 
         cap.release()
