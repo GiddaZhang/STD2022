@@ -13,7 +13,6 @@ class Match(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(self.input_size, self.hidden_size),
-            nn.Dropout(dropout),
             nn.ReLU(),
             nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
@@ -29,8 +28,8 @@ class Match(nn.Module):
     def init_params(self):
         for m in self.modules():
             if isinstance(m, nn.Linear):
-                nn.init.xavier_normal(m.weight)
-                nn.init.constant(m.bias, 0)
+                nn.init.xavier_normal_(m.weight)
+                nn.init.constant_(m.bias, 0)
 
     def forward(self, feat):
         return self.net(feat)
@@ -44,7 +43,6 @@ class Prob(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(self.input_size, self.hidden_size),
-            nn.Dropout(dropout),
             nn.ReLU(),
             nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
@@ -61,8 +59,8 @@ class Prob(nn.Module):
     def init_params(self):
         for m in self.modules():
             if isinstance(m, nn.Linear):
-                nn.init.xavier_normal(m.weight)
-                nn.init.constant(m.bias, 0)
+                nn.init.xavier_normal_(m.weight)
+                nn.init.constant_(m.bias, 0)
 
     def forward(self, feat):
         return self.net(feat)
