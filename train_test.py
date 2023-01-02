@@ -40,7 +40,7 @@ if not os.path.exists(opt.checkpoint_folder):
     os.system('mkdir {0}'.format(opt.checkpoint_folder))
 
 # 划分一部分Train训练集到测试集
-dataset = dset('Train')
+dataset = dset('Train', 'diy')
 
 print('number of train and test samples is: {0}'.format(len(dataset)))
 print('finished loading data')
@@ -91,39 +91,81 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
 
     end = time.time()
     for i, (vfeat, afeat) in enumerate(train_loader):
+        # # afeat = [64, 10, 128], 64 is batch_size
+        # # vfeat = [64, 10, 512], 64 is batch_size
+
+        # # shuffle
+        # bz = vfeat.size()[0]        # batch_size
+        # orders = np.arange(bz).astype('int32')
+        # shuffle_orders = orders.copy()
+        # np.random.shuffle(shuffle_orders)
+
+        # afeat2 = afeat[torch.from_numpy(shuffle_orders).long()].clone()
+
+        # # concat the vfeat and afeat respectively
+        # # afeat0 = [128, 10, 128]
+        # # vfeat0 = [128, 10, 512]
+        # afeat0 = torch.cat((afeat, afeat2), 0)
+        # vfeat0 = torch.cat((vfeat, vfeat), 0)
+
+        # # generating the labels
+        # # 1. the labels for the shuffled feats
+        # label1 = (orders == shuffle_orders + 0).astype('int32')
+        # target1 = torch.from_numpy(label1).long()
+
+        # # 2. the labels for the original feats
+        # label2 = label1.copy()
+        # label2[:] = 1
+        # target2 = torch.from_numpy(label2).long()
+
+        # # concat the labels together
+        # target = torch.cat((target2, target1), 0)
+
+        # # transpose the feats
+        # # afeat0 = [128, 128, 10]
+        # # vfeat0 = [128, 512, 10]
+        # vfeat0 = vfeat0.transpose(2, 1)
+        # afeat0 = afeat0.transpose(2, 1)
         # afeat = [64, 10, 128], 64 is batch_size
         # vfeat = [64, 10, 512], 64 is batch_size
 
         # shuffle
         bz = vfeat.size()[0]        # batch_size
         orders = np.arange(bz).astype('int32')
-        shuffle_orders = orders.copy()
-        np.random.shuffle(shuffle_orders)
+        shuffle_orders1 = orders.copy()
+        np.random.shuffle(shuffle_orders1)
+        shuffle_orders2 = orders.copy()
+        np.random.shuffle(shuffle_orders2)
 
-        afeat2 = afeat[torch.from_numpy(shuffle_orders).long()].clone()
+        afeat1 = afeat[torch.from_numpy(shuffle_orders1).long()].clone()
+        afeat2 = afeat[torch.from_numpy(shuffle_orders2).long()].clone()
 
         # concat the vfeat and afeat respectively
-        # afeat0 = [128, 10, 128]
-        # vfeat0 = [128, 10, 512]
-        afeat0 = torch.cat((afeat, afeat2), 0)
-        vfeat0 = torch.cat((vfeat, vfeat), 0)
+        # afeat0 = [64*3, 10, 128]
+        # afeat0 = [afeat;afeat2(shuffled);afeat2(shuffled)]
+        # vfeat0 = [64*3, 10, 512]
+        # vfeat0 = [vfeat;vfeat;vfeat]
+        afeat0 = torch.cat((afeat, afeat1, afeat2), 0)
+        vfeat0 = torch.cat((vfeat, vfeat, vfeat), 0)
 
         # generating the labels
         # 1. the labels for the shuffled feats
-        label1 = (orders == shuffle_orders + 0).astype('int32')
+        label1 = (orders == shuffle_orders1 + 0).astype('int32')
         target1 = torch.from_numpy(label1).long()
-
-        # 2. the labels for the original feats
-        label2 = label1.copy()
-        label2[:] = 1
+        label2 = (orders == shuffle_orders2 + 0).astype('int32')
         target2 = torch.from_numpy(label2).long()
 
+        # 2. the labels for the original feats
+        label0 = label1.copy()
+        label0[:] = 1
+        target0 = torch.from_numpy(label0).long()
+
         # concat the labels together
-        target = torch.cat((target2, target1), 0)
+        target = torch.cat((target0, target1, target2), 0)
 
         # transpose the feats
-        # afeat0 = [128, 128, 10]
-        # vfeat0 = [128, 512, 10]
+        # afeat0 = [64*3, 128, 10]
+        # vfeat0 = [64*3, 512, 10]
         vfeat0 = vfeat0.transpose(2, 1)
         afeat0 = afeat0.transpose(2, 1)
 
