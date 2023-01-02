@@ -23,3 +23,34 @@ TODO：
   - 音频用谱减法预处理后提取特征
 - 修改网络结构
   - 新增`test_train.py`文件，将训练集的15%划分出来做测试，效果不理想，top5准确率只有60%。
+
+## 1.2
+炼丹记录：
+
+- Prob两层+助教给定特征+不做数据增强+LSTM输出接Afeat+layers_num=3, dropout=.1
+
+  ```
+  Test checkpoint epoch 80.
+  Top1 accuracy for sample 50 is: 0.2922.
+  Top5 accuracy for sample 50 is: 0.72112.
+  Test checkpoint epoch 90.
+  Top1 accuracy for sample 50 is: 0.28732.
+  Top5 accuracy for sample 50 is: 0.71428.
+  Test checkpoint epoch 100.
+  Top1 accuracy for sample 50 is: 0.30147999999999997.
+  Top5 accuracy for sample 50 is: 0.72772.
+  Test checkpoint epoch 110.
+  Top1 accuracy for sample 50 is: 0.27408.
+  Top5 accuracy for sample 50 is: 0.70096.
+  Test checkpoint epoch 120.
+  Top1 accuracy for sample 50 is: 0.29908.
+  Top5 accuracy for sample 50 is: 0.73584.
+  ```
+
+- Prob两层+自己提取特征+不做数据增强+LSTM输出接Afeat+layers_num=3, dropout=.1
+  ```
+  Test checkpoint epoch 90.
+  Top1 accuracy for sample 50 is: 0.18547999999999998.
+  Top5 accuracy for sample 50 is: 0.57804.
+  ```
+- 
