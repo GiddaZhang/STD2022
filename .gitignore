@@ -2,9 +2,9 @@
 .ipynb_checkpoints
 __pycache__
 torchvggish/*.pth
-*.npy
+# *.npy
 *.pth
 .env/*
-Train/
-Test/
+*.wav
+*.mp4
 *.zip
