@@ -11,13 +11,25 @@ class Match(nn.Module):
         self.output_size = output_size
         self.hidden_size = hidden_size
 
+        # self.net = nn.Sequential(
+        #     nn.Linear(self.input_size, self.hidden_size),
+        #     nn.ReLU(),
+        #     nn.Dropout(dropout),
+        #     nn.Linear(self.hidden_size, self.hidden_size),
+        #     # nn.ReLU(),
+        #     # nn.Linear(self.hidden_size, self.output_size),
+        #     nn.ReLU(),
+        #     nn.Linear(self.output_size, self.output_size),
+        #     nn.ReLU()
+        # )
         self.net = nn.Sequential(
             nn.Linear(self.input_size, self.hidden_size),
-            nn.ReLU(),
             nn.Dropout(dropout),
+            nn.ReLU(),
             nn.Linear(self.hidden_size, self.hidden_size),
-            # nn.ReLU(),
-            # nn.Linear(self.hidden_size, self.output_size),
+            nn.ReLU(),
+            nn.Linear(self.hidden_size, self.output_size),
+            nn.Dropout(dropout),
             nn.ReLU(),
             nn.Linear(self.output_size, self.output_size),
             nn.ReLU()
@@ -41,18 +53,31 @@ class Prob(nn.Module):
         self.input_size = input_size
         self.hidden_size = hidden_size
 
+        # self.net = nn.Sequential(
+        #     nn.Linear(self.input_size, self.hidden_size),
+        #     nn.ReLU(),
+        #     nn.Dropout(dropout),
+        #     # nn.Linear(self.hidden_size, self.hidden_size),
+        #     # nn.ReLU(),
+        #     nn.Linear(self.hidden_size, 32),
+        #     nn.ReLU(),
+        #     # nn.Linear(32, 32),
+        #     # nn.ReLU(),
+        #     nn.Linear(32, 2)
+        #     # nn.Softmax()
+        # )
         self.net = nn.Sequential(
             nn.Linear(self.input_size, self.hidden_size),
-            nn.ReLU(),
             nn.Dropout(dropout),
-            # nn.Linear(self.hidden_size, self.hidden_size),
-            # nn.ReLU(),
-            nn.Linear(self.hidden_size, 32),
             nn.ReLU(),
-            # nn.Linear(32, 32),
-            # nn.ReLU(),
+            nn.Linear(self.hidden_size, self.hidden_size),
+            nn.ReLU(),
+            nn.Linear(self.hidden_size, 32),
+            nn.Dropout(dropout),
+            nn.ReLU(),
+            nn.Linear(32, 32),
+            nn.ReLU(),
             nn.Linear(32, 2)
-            # nn.Softmax()
         )
 
         self.init_params()
@@ -68,7 +93,7 @@ class Prob(nn.Module):
 
 
 class FrameByFrame(nn.Module):
-    def __init__(self, Vinput_size=512, Ainput_size=128, output_size=64, layers_num=5, dropout=0):
+    def __init__(self, Vinput_size=512, Ainput_size=128, output_size=128, layers_num=3, dropout=0.1):
         super(FrameByFrame, self).__init__()
         self.Vinput_size = Vinput_size
         self.Ainput_size = Ainput_size
@@ -92,12 +117,12 @@ class FrameByFrame(nn.Module):
         if Vfeat.is_cuda:
             h_0 = h_0.cuda()
             c_0 = c_0.cuda()
-        outAfeat, _ = self.AFeatRNN((Afeat/100.0).permute(2, 0, 1), (h_0, c_0))
+        outAfeat, _ = self.AFeatRNN((Afeat/255.0).permute(2, 0, 1), (h_0, c_0))
         count = 0
         for i in range(10):
             # outAfeat: [10, 64*3, 64]
             # outAfeat[i,:,:]: [64*3, 64]
-            Afeats = self.Amatching(outAfeat[i, :, :])
+            Afeats = self.Amatching(outAfeat[i, :, :]) + Afeat[:, :, i] / 255.0
             # Vfeat: [64*3, 512, 10]
             # Vfeat[:,:,i]: [64*3, 512]
             Vfeats = self.Vmatching(Vfeat[:, :, i])
