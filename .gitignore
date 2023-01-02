@@ -8,3 +8,5 @@ torchvggish/*.pth
 Train/
 Test/
 *.zip
+*.whl
+temp.*
