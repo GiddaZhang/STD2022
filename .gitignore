@@ -7,3 +7,4 @@ torchvggish/*.pth
 .env/*
 Train/
 Test/
+*.zip
