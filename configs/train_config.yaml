@@ -6,7 +6,7 @@ batchSize: 64
 lr: 0.001
 lr_decay: 0.9
 lr_decay_epoch: 30
-max_epochs: 150
+max_epochs: 100
 print_freq: 15
 epoch_save: 10
 checkpoint_folder: ./checkpoints

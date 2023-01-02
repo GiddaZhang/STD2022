@@ -25,7 +25,7 @@ TODO：
   - 新增`test_train.py`文件，将训练集的15%划分出来做测试，效果不理想，top5准确率只有60%。
 
 ## 1.2
-炼丹记录：
+### 炼丹记录
 
 - Prob两层+助教给定特征+不做数据增强+LSTM输出接Afeat+layers_num=3, dropout=.1
 
@@ -47,10 +47,18 @@ TODO：
   Top5 accuracy for sample 50 is: 0.73584.
   ```
 
-- Prob两层+自己提取特征+不做数据增强+LSTM输出接Afeat+layers_num=3, dropout=.1
+- Prob多层+畅畅提取特征+不做数据增强+LSTM输出接Afeat+layers_num=3, dropout=.1
   ```
-  Test checkpoint epoch 90.
-  Top1 accuracy for sample 50 is: 0.18547999999999998.
-  Top5 accuracy for sample 50 is: 0.57804.
+  Test checkpoint epoch 80.
+  Top1 accuracy for sample 50 is: 0.26404.
+  Top5 accuracy for sample 50 is: 0.71052.
+  Test checkpoint epoch 100.
+  Top1 accuracy for sample 50 is: 0.28056000000000003.
+  Top5 accuracy for sample 50 is: 0.72456.
   ```
-- 
+### 特征说明
+
+- `Train/afeat&vfeat` 特征替换为畅畅提取的特征
+- `Test/Clean/vfeat` 特征替换为畅畅提取的特征
+- `Test/Noise/vfeat` 特征替换为畅畅提取的特征
+- `Test/Denoise/vfeat` 为畅畅提取的特征，似乎还没有提取音频去噪的特征。

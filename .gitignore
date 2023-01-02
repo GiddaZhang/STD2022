@@ -2,7 +2,7 @@
 .ipynb_checkpoints
 __pycache__
 torchvggish/*.pth
-*.npy
+# *.npy
 *.pth
 .env/*
 Train/
@@ -10,3 +10,6 @@ Test/
 *.zip
 *.whl
 temp.*
+*.wav
+*.mp4
+*.zip
