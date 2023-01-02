@@ -3,10 +3,13 @@ import numpy as np
 import os
 
 class VideoFeatDataset(data.Dataset):
-    def __init__(self, root):
+    def __init__(self, root, option):
         self.root = root
         self.apath = os.path.join(root, 'afeat')
         self.vpath = os.path.join(root, 'vfeat')
+        if option == 'diy':
+            self.apath = os.path.join(root, 'afeat_diy')
+            self.vpath = os.path.join(root, 'vfeat_diy')
 
     def __getitem__(self, index):
         vfeat = np.load(os.path.join(self.vpath, '%04d.npy'%(index))).astype('float32')
