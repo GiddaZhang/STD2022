@@ -9,5 +9,5 @@ lr_decay_epoch: 30
 max_epochs: 100
 print_freq: 15
 epoch_save: 10
-checkpoint_folder: ./checkpoints
+checkpoint_folder: ./checkpoints/noise
 prefix: 'VA_METRIC'
