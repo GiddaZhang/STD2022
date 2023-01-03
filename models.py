@@ -42,21 +42,21 @@ class Prob(nn.Module):
         self.input_size = input_size
         self.hidden_size = hidden_size
 
-        self.net = nn.Sequential(
-            nn.Linear(self.input_size, self.hidden_size),
-            nn.Dropout(dropout),
-            nn.ReLU(),
-            nn.Linear(self.hidden_size, self.hidden_size),
-            nn.ReLU(),
-            nn.Linear(self.hidden_size, 32),
-            nn.Dropout(dropout),
-            nn.ReLU(),
-            nn.Linear(32, 32),
-            nn.ReLU(),
-            nn.Linear(32, 2)
-        )
-        # self.fc1 = nn.Linear(self.input_size, self.hidden_size)
-        # self.fc2 = nn.Linear(self.hidden_size, 2)
+        # self.net = nn.Sequential(
+        #     nn.Linear(self.input_size, self.hidden_size),
+        #     nn.Dropout(dropout),
+        #     nn.ReLU(),
+        #     nn.Linear(self.hidden_size, self.hidden_size),
+        #     nn.ReLU(),
+        #     nn.Linear(self.hidden_size, 32),
+        #     nn.Dropout(dropout),
+        #     nn.ReLU(),
+        #     nn.Linear(32, 32),
+        #     nn.ReLU(),
+        #     nn.Linear(32, 2)
+        # )
+        self.fc1 = nn.Linear(self.input_size, self.hidden_size)
+        self.fc2 = nn.Linear(self.hidden_size, 2)
 
         self.init_params()
 
@@ -67,10 +67,10 @@ class Prob(nn.Module):
                 nn.init.constant_(m.bias, 0.1)
 
     def forward(self, feat):
-        return self.net(feat)
-        # feat = F.relu(self.fc1(feat))
-        # feat = self.fc2(feat)
-        # return feat
+        # return self.net(feat)
+        feat = F.relu(self.fc1(feat))
+        feat = self.fc2(feat)
+        return feat
 
 
 class FrameByFrame(nn.Module):
