@@ -57,7 +57,7 @@ def main():
         if i % 10 is 0:
             print(i)
 
-    np.save('clean.npy'.format(epoch), rst)
+    np.save('noise.npy'.format(epoch), rst)
 
     # rst = np.load('rst_epoch{}.npy'.format(epoch))
     print('Test checkpoint epoch {}.'.format(epoch))
