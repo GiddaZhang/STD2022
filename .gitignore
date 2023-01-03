@@ -5,6 +5,11 @@ torchvggish/*.pth
 *.npy
 *.pth
 .env/*
+Train/
+Test/
+*.zip
+*.whl
+temp.*
 *.wav
 *.mp4
 *.zip
