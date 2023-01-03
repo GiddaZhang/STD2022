@@ -199,7 +199,7 @@ def main():
     ############## Train ##############
     global opt
     # split data
-    train_size = int(0.95 * len(dataset))
+    train_size = int(0.98 * len(dataset))
     test_size = len(dataset) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
     print('number of train samples is: {0}'.format(len(train_dataset)))
