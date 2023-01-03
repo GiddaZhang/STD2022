@@ -62,3 +62,21 @@ TODO：
 - `Test/Clean/vfeat` 特征替换为畅畅提取的特征
 - `Test/Noise/vfeat` 特征替换为畅畅提取的特征
 - `Test/Denoise/vfeat` 为畅畅提取的特征，似乎还没有提取音频去噪的特征。
+
+## 1.3
+
+## 完成clean测试
+（结果被ignore掉了）以下是训练+测试结果
+```
+Test checkpoint epoch 100.
+Top1 accuracy for sample 50 is: 0.26892.
+Top5 accuracy for sample 50 is: 0.77008.
+```
+
+## TODO：Noise测试
+
+- 训练用的特征存到`Train/{}feat_denoise`中，{}是a或v；
+- `train_test.py`用于一边训练一边测试，为了尽可能多得训练，只分2%的训练集出来测试（将将够50个）。
+  - 参数存在`checkpoints/noise`里；
+  - 训好后打印若干轮的结果，从中选最好的即可。
+- 最后用最好的参数运行`test.py`
