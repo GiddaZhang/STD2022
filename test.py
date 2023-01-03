@@ -32,15 +32,15 @@ def get_top(tsample, rst):
     print('Top5 accuracy for sample {} is: {}.'.format(n, top5))
 
 def main():
-    epoch = 150
+    epoch = 100
     model = models.FrameByFrame()
-    ckpt = torch.load('checkpoints/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
+    ckpt = torch.load('checkpoints/noise/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
     model.load_state_dict(ckpt)
     model.cuda().eval()
 
-    vpath = 'Test/Clean/vfeat'
-    apath = 'Test/Clean/afeat'
-    test_num = 500
+    vpath = 'Test/Denoise/vfeat'
+    apath = 'Test/Denoise/afeat'
+    test_num = 804
 
     rst = np.zeros((test_num, test_num))
     vfeats = torch.zeros(test_num, 512, 10).float()
@@ -57,15 +57,15 @@ def main():
         if i % 10 is 0:
             print(i)
 
-    np.save('rst_epoch{}.npy'.format(epoch), rst)
+    np.save('clean.npy'.format(epoch), rst)
 
     # rst = np.load('rst_epoch{}.npy'.format(epoch))
     print('Test checkpoint epoch {}.'.format(epoch))
 
-    gen_tsample(50, test_num)
+    # gen_tsample(50, test_num)
 
-    tsample = np.load('tsample_{}.npy'.format(50))
-    get_top(tsample, rst)
+    # tsample = np.load('tsample_{}.npy'.format(50))
+    # get_top(tsample, rst)
 
 if __name__ == '__main__':
     main()
