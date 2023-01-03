@@ -164,13 +164,13 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
 def test(test_dataset, epoch):
     model = models.FrameByFrame()
     ckpt = torch.load(
-        'checkpoints/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
+        'checkpoints/noise/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
     model.load_state_dict(ckpt)
     model.cuda().eval()
 
     test_num = len(test_dataset)
-    vpath = 'Train/vfeat'
-    apath = 'Train/afeat'
+    vpath = 'Train/vfeat_denoise'
+    apath = 'Train/afeat_denoise'
 
     rst = np.zeros((test_num, test_num))
     vfeats = torch.zeros(test_num, 512, 10).float()
@@ -199,7 +199,7 @@ def main():
     ############## Train ##############
     global opt
     # split data
-    train_size = int(0.9 * len(dataset))
+    train_size = int(0.95 * len(dataset))
     test_size = len(dataset) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
     print('number of train samples is: {0}'.format(len(train_dataset)))
@@ -234,6 +234,8 @@ def main():
     
 
     ############## Test ##############
+    test(test_dataset, 40)
+    test(test_dataset, 60)
     test(test_dataset, 80)
     test(test_dataset, 100)
 
