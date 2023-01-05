@@ -80,3 +80,28 @@ Top5 accuracy for sample 50 is: 0.77008.
   - 参数存在`checkpoints/noise`里；
   - 训好后打印若干轮的结果，从中选最好的即可。
 - 最后用最好的参数运行`test.py`
+
+## 1.4
+文件说明
+- `ans_check.ipynb`
+  可以同时播放音视频，检查结果是否正确
+- `denoise_test.ipynb`
+  测试音频去噪效果
+- `*.npy`们
+  - `noise.npy`
+    - train和test均用task2谱减法去噪；
+    - 训练正确率20%；
+    - 经检查测试结果很差。
+  - `noise_new.npy`
+    - train用加噪声的afeat，直接在test/noise上测试；
+    - 训练正确率60%；
+    - 测试结果还可以。
+  - `noise_with_clean_chkpoints.npy`
+    - train用干净的特征，test经`noisereduce`库去噪；
+    - 测试结果很差。
+  - `noise_with_noise_chkpoints.npy`
+    - train用`noisereduce`去噪，test经`noisereduce`库去噪；
+    - 训练准确率20%；
+    - 测试结果很差。
+  - `noise_with_clean_chkpoints_using_noise_feat.npy`
+    - train用干净的特征，test不做去噪处理；

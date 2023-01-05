@@ -32,14 +32,14 @@ def get_top(tsample, rst):
     print('Top5 accuracy for sample {} is: {}.'.format(n, top5))
 
 def main():
-    epoch = 100
+    epoch = 80
     model = models.FrameByFrame()
-    ckpt = torch.load('checkpoints/noise/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
+    ckpt = torch.load('checkpoints/clean/VA_METRIC_state_epoch{}.pth'.format(epoch), map_location='cpu')
     model.load_state_dict(ckpt)
     model.cuda().eval()
 
-    vpath = 'Test/Denoise/vfeat'
-    apath = 'Test/Denoise/afeat'
+    vpath = 'Test/Noise/vfeat'
+    apath = 'Test/Noise/afeat'
     test_num = 804
 
     rst = np.zeros((test_num, test_num))
@@ -57,7 +57,7 @@ def main():
         if i % 10 is 0:
             print(i)
 
-    np.save('noise.npy'.format(epoch), rst)
+    np.save('noise_with_clean_chkpoints_using_noise_feat.npy'.format(epoch), rst)
 
     # rst = np.load('rst_epoch{}.npy'.format(epoch))
     print('Test checkpoint epoch {}.'.format(epoch))
